@@ -35,7 +35,6 @@ public class UsersServlets extends HttpServlet {
         while (scanner.hasNextLine()){
             resp.getWriter().println(scanner.nextLine());
         }
-        //resp.getWriter().println(users.findById(1L).get());
         long i = 1L;
 
         while (crud.read(i) != null){
@@ -53,11 +52,20 @@ public class UsersServlets extends HttpServlet {
                 }
         ).collect(Collectors.joining()).split(" ");
 
-        User user = new User();
-        user.setName(params[0]);
-        user.setPassword(params[1]);
-        user.setLogin(params[2]);
-        crud.create(user);
+        if(params.length == 3) {
+            User user = new User();
+            user.setName(params[0]);
+            user.setPassword(params[1]);
+            user.setLogin(params[2]);
+            crud.create(user);
+        } else if (params.length == 4) {
+            User user = new User();
+            user.setName(params[0] + " " + params[1]);
+            user.setPassword(params[2]);
+            user.setLogin(params[3]);
+            crud.create(user);
+        }
+
 
         resp.sendRedirect("/users");
     }
